@@ -8,22 +8,18 @@ def quad_array(sequence):
             final.append(0)
         elif sequence[i] == "C":
             final.append(1)
-        elif sequence[i] == "T" or i == "U":
-            final.append(2)
         elif sequence[i] == "G":
+            final.append(2)
+        elif sequence[i] == "T" or i == "U":
             final.append(3)
         else:
             return "invalid"
     return final
 
 
-def main():
+def quaternary_translator():
     nucleotide_header = ""
     seq = []
-    print("Welcome to ProjectA!")
-    print("Enter (e) at any time to exit")
-    print("File input should be in FASTA *.txt format, while console input "
-          "will be in raw nucleotide sequence")
     while True:
         method = input("Select method of input, (f)ile (c)onsole: ")
         if method == "c" or method == "f":
@@ -37,10 +33,10 @@ def main():
             if nucleotide_header == "e":
                 quit()
             seq = quad_array(input("Enter the nucleotide sequence: "))
-            if seq != "invalid":
-                break
             if seq == "e":
                 quit()
+            if seq != "invalid":
+                break
     elif method == "f":
         seq_string = ""
         while True:
@@ -54,20 +50,25 @@ def main():
         nucleotide_header = f1[0][1:-1]
         for i in range(1, len(f1)):
             seq_string = seq_string + f1[i][:-1]
-        print(seq_string)
         seq = quad_array(seq_string)
     while True:
         choice = input(
             "Enter the base translation: (q2d) quaternary to decimal, "
-            "(q2b) quaternary to binary, (r)eturn array: ")
+            "(q2b) quaternary to binary, (q2h) quaternary to hexadecimal ("
+            "r)eturn array: ")
         if choice == "q2b":
-            print(nucleotide_header + " Binary Form (Base 2)")
+            print(nucleotide_header + " Binary Form/Base 2)")
             print(DataTranslate.q2b_translation(seq))
         elif choice == "q2d":
-            print(nucleotide_header + " Decimal Form (Base 10)")
+            print(nucleotide_header + " Decimal Form/Base 10 (value, "
+                                      "sequence length)")
             print(DataTranslate.q2d_translation(seq))
+        elif choice == "q2h":
+            print(nucleotide_header + " Hexadecimal Form/Base 16(value, "
+                                      "sequence length)")
+            print(DataTranslate.q2h_translation(seq))
         elif choice == "r":
-            print(nucleotide_header + " Quaternary Array (Base 4)")
+            print(nucleotide_header + " Quaternary Array/Base 4 Array")
             print(seq)
         elif choice == "e":
             quit()
@@ -75,7 +76,33 @@ def main():
             print("Invalid input")
 
 
+def translate2quaternary():
+    nucleotide_header = input("Enter the name of the nucleotide sequence: ")
+    if nucleotide_header == "e":
+        quit()
+    base = input("Which base would you like to translate from (2), (10), "
+                 "(16): ")
+    if base == "e":
+        quit()
+    elif base == "10":
+        seq = input("Please input the decimal string: ")
+        length = input("Please input the sequence length: ")
+        print(">" + nucleotide_header)
+        print(DataTranslate.d2q_translation(int(seq), int(length)))
+
+
+def main():
+    print("Welcome to ProjectA!")
+    print("Enter (e) at any time to exit")
+    mode = input("Nucleotide sequence (t)ranslation or translation to ("
+                 "q)uaternary nucleotide sequence: ")
+    if mode == "t":
+        print("File input should be in FASTA *.txt format, while console input "
+              "will be in raw nucleotide sequence")
+        quaternary_translator()
+    elif mode == "q":
+        translate2quaternary()
+
+
 if __name__ == "__main__":
     main()
-
-
