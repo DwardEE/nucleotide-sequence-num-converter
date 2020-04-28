@@ -12,7 +12,7 @@ def q2b_translation(sequence):
 
 
 def q2h_translation(sequence):
-    deci_intermediate = q2d_translation(sequence)
+    deci_intermediate = q2d_translation(sequence)[0]
     hex_final = hex(deci_intermediate)
     return hex_final, len(sequence)
 
@@ -42,3 +42,25 @@ def d2q_translation(sequence, length):
     for i in range(prefix):
         quart_final = "A" + quart_final
     return quart_final
+
+
+def h2q_translation(sequence, length):
+    deci_intermediate = int(sequence, 16)
+    return d2q_translation(deci_intermediate, length)
+
+
+def b2q_translation(sequence):
+    seq = "0" + sequence if len(sequence) % 2 != 0 else sequence
+    final = ""
+    for i in range(0, len(seq), 2):
+        if seq[i] + seq[i + 1] == "00":
+            final += "A"
+        elif seq[i] + seq[i + 1] == "01":
+            final += "C"
+        elif seq[i] + seq[i + 1] == "10":
+            final += "G"
+        elif seq[i] + seq[i + 1] == "11":
+            final += "T"
+        else:
+            return "invalid"
+    return final

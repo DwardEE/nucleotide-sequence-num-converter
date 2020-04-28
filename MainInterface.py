@@ -17,6 +17,14 @@ def quad_array(sequence):
     return final
 
 
+def write_file(sequence, name, filename):
+    f = open(filename, "a")
+    f.write(">" + name + "\n")
+    for i in range(0, len(sequence), 70):
+        f.write(sequence[i:i+70] + "\n")
+    f.close()
+
+
 def quaternary_translator():
     nucleotide_header = ""
     seq = []
@@ -57,16 +65,40 @@ def quaternary_translator():
             "(q2b) quaternary to binary, (q2h) quaternary to hexadecimal ("
             "r)eturn array: ")
         if choice == "q2b":
-            print(nucleotide_header + " Binary Form/Base 2)")
+            print(nucleotide_header + " Binary Form/Base 2")
             print(DataTranslate.q2b_translation(seq))
+            write_input = input(
+                "Would you like to write the results to a file? (y) or (n) ")
+            if write_input == "e" or write_input == "n":
+                quit()
+            if write_input == "y":
+                filename = input("Which file do you want to write to? ")
+                write_file(DataTranslate.q2b_translation(seq),
+                           nucleotide_header,  filename)
         elif choice == "q2d":
             print(nucleotide_header + " Decimal Form/Base 10 (value, "
                                       "sequence length)")
             print(DataTranslate.q2d_translation(seq))
+            write_input = input(
+                "Would you like to write the results to a file? (y) or (n) ")
+            if write_input == "e" or write_input == "n":
+                quit()
+            elif write_input == "y":
+                filename = input("Which file do you want to write to? ")
+                write_file(DataTranslate.q2d_translation(seq),
+                           nucleotide_header, filename)
         elif choice == "q2h":
             print(nucleotide_header + " Hexadecimal Form/Base 16(value, "
                                       "sequence length)")
             print(DataTranslate.q2h_translation(seq))
+            write_input = input(
+                "Would you like to write the results to a file? (y) or (n) ")
+            if write_input == "e" or write_input == "n":
+                quit()
+            elif write_input == "y":
+                filename = input("Which file do you want to write to? ")
+                write_file(DataTranslate.q2h_translation(seq),
+                           nucleotide_header, filename)
         elif choice == "r":
             print(nucleotide_header + " Quaternary Array/Base 4 Array")
             print(seq)
@@ -89,6 +121,15 @@ def translate2quaternary():
         length = input("Please input the sequence length: ")
         print(">" + nucleotide_header)
         print(DataTranslate.d2q_translation(int(seq), int(length)))
+    elif base == "16":
+        seq = input("Please input the hexadecimal string: ")
+        length = input("Please input the sequence length: ")
+        print(">" + nucleotide_header)
+        print(DataTranslate.h2q_translation(int(seq), int(length)))
+    elif base == "2":
+        seq = input("Please input the binary string: ")
+        print(">" + nucleotide_header)
+        print(DataTranslate.b2q_translation(seq))
 
 
 def main():
