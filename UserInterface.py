@@ -1,11 +1,25 @@
 from tkinter import *
 import DataTranslate
+import MainInterface
 
 trans_type = [
     "q2b", "q2d", "q2h",
     "b2q", "d2q", "h2q"
 ]
 sequence_type = "Sequence"
+
+
+def focus_in(_):
+    if input_sequence.cget("fg") == "grey":
+        input_sequence.delete('1.0', "end")
+        input_sequence.config(fg='black')
+
+
+def focus_out(_):
+    if input_sequence.compare("end-1c", "==", "1.0"):
+        input_sequence.config(fg='grey')
+        input_sequence.insert("end", "Insert sequence here...")
+
 
 root = Tk()
 root.title("Nucleotide Sequence Translator")
@@ -22,14 +36,14 @@ frame2.pack(padx=15, pady=5, anchor="w")
 frame3 = LabelFrame(root, text="Translation", padx=5, pady=5)
 frame3.pack(padx=15, pady=(5, 15))
 
-input_sequence = Text(frame1, height=10, width=70)
+input_sequence = Text(frame1, height=10, width=70, fg="grey")
 input_sequence.grid(row=0, column=0, columnspan=3)
-input_sequence.insert(END, "Insert sequence here...")
+input_sequence.insert("end", "Insert sequence here...")
 
-read_button = Button(frame1, text="Browse Files")
+read_button = Button(frame1, text="Choose From Files")
 read_button.grid(row=1, column=0, padx=5, pady=5, sticky="w")
 
-output_sequence = Text(frame3, height=10, width=70)
+output_sequence = Text(frame3, state="disabled", height=10, width=70)
 output_sequence.grid(row=0, column=0, columnspan=3)
 
 write_button = Button(frame3, text="Write Results to File")
@@ -58,16 +72,20 @@ h2q_button.grid(row=3, column=1, sticky="w")
 
 
 def translate_execute():
-    if trans_type == "q2b":
-        my_label = Label(root, text="q2b")
-        my_label.pack()
-    elif trans_type == "q2d":
-        my_label = Label(root, text="q2d")
-        my_label.pack()
+    str_input = input_sequence.get("1.0", "end-1c")
+    str_input = str_input.replace("\n", "")
+    str_input = str_input.replace(" ", "")
+    seq_array = MainInterface.quad_array(str_input)
+    output_sequence.configure(state="normal")
+    output_sequence.insert("end", DataTranslate.q2b_translation(seq_array))
+    output_sequence.configure(state="disabled")
 
 
 trans_execute_button = Button(frame1, text="Translate",
                               command=translate_execute)
 trans_execute_button.grid(row=1, column=2, padx=5, pady=5, sticky="e")
+
+input_sequence.bind("<FocusIn>", focus_in)
+input_sequence.bind("<FocusOut>", focus_out)
 
 root.mainloop()
