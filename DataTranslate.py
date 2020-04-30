@@ -6,6 +6,14 @@ def q2d_translation(sequence):
     return deci_final, len(sequence)
 
 
+def q2b_seg_translation(sequence):
+    intermediate = q2b_translation(sequence)
+    final = ""
+    for i in range(0, len(intermediate), 2):
+        final = final + intermediate[i: i+2] + " "
+    return final.rstrip()
+
+
 def q2b_translation(sequence):
     deci_intermediate = q2d_translation(sequence)
     return format(deci_intermediate[0], '0' + str(len(sequence) * 2) + 'b')
@@ -14,7 +22,7 @@ def q2b_translation(sequence):
 def q2h_translation(sequence):
     deci_intermediate = q2d_translation(sequence)[0]
     hex_final = hex(deci_intermediate)
-    return hex_final, len(sequence)
+    return hex_final[2:], len(sequence)
 
 
 def d2q_translation(sequence, length):
